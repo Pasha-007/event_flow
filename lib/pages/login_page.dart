@@ -17,21 +17,54 @@ class _LoginPageState extends State<LoginPage> {
 
   //sign user in method
   void signUserIn(BuildContext context) async {
+    showDialog(
+        context: context,
+        builder: (context){
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+    );
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
-
       // Navigate to the home page upon successful login.
       Navigator.pushReplacementNamed(context, '/home_page');
+      // Navigator.pop(context);
     } catch (e) {
       print("Error signing in: $e");
 
-      // Handle the error appropriately. You can show an error message to the user.
-      // Example: ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error signing in")));
+      // Handle the error appropriately.
+      String errorMessage = "An error occurred during sign-in.";
+
+      if (e is FirebaseAuthException) {
+        // Check specific FirebaseAuthException codes and show appropriate messages
+        switch (e.code) {
+          case 'user-not-found':
+            errorMessage = 'No user found with this email.';
+            break;
+          case 'wrong-password':
+            errorMessage = 'Wrong password provided for this user.';
+            break;
+        // Add more cases as needed
+        }
+      }
+
+      // Show a SnackBar with the error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage),
+          duration: const Duration(seconds: 3),
+        ),
+      );
     }
+
+    Navigator.pop(context);
   }
+
+
 
   @override
   Widget build(BuildContext context) {
