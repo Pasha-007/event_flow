@@ -10,12 +10,24 @@ class LoginPage extends StatelessWidget {
   final passwordController = TextEditingController();
 
   //sign user in method
-  void signUserIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
+  void signUserIn(BuildContext context) async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
-    );
+      );
+
+      // Navigate to the home page upon successful login.
+      Navigator.pushReplacementNamed(context, '/home');
+    } catch (e) {
+      print("Error signing in: $e");
+
+      // Handle the error appropriately. You can show an error message to the user.
+      // Example: ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error signing in")));
+    }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +69,7 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 20.0),
             MyButton(
-              onTap: signUserIn,
+              onTap: () => signUserIn(context),
             ),
             const SizedBox(height: 20,),
             Row(
