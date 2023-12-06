@@ -1,5 +1,6 @@
 import 'package:event_flow/pages/home_page.dart';
 import 'package:event_flow/pages/intro_page.dart';
+import 'package:event_flow/pages/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,7 @@ class AuthPage extends StatelessWidget {
             return HomePage();
           }
           else{
-            return const IntroPage();
+            return LoginPage();
           }
         },
       ),

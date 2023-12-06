@@ -1,11 +1,17 @@
+import 'package:event_flow/pages/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../components/my_button.dart';
 import '../components/my_textfield.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   LoginPage({super.key});
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -18,7 +24,7 @@ class LoginPage extends StatelessWidget {
       );
 
       // Navigate to the home page upon successful login.
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, '/home_page');
     } catch (e) {
       print("Error signing in: $e");
 
@@ -26,8 +32,6 @@ class LoginPage extends StatelessWidget {
       // Example: ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error signing in")));
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
