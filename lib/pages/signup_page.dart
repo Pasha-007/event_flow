@@ -9,6 +9,8 @@ class SignupPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  SignupPage({super.key});
+
   void signUpUser(BuildContext context) async {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -57,7 +59,7 @@ class SignupPage extends StatelessWidget {
       backgroundColor: const Color(0xff4D608A),
 
       appBar: AppBar(
-        title: Text('Sign Up'),
+        title: const Text('Sign Up'),
       ),
       body: Center(
         child: Column(
@@ -75,7 +77,7 @@ class SignupPage extends StatelessWidget {
               hintText: 'Password',
               obscureText: true,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             MyButton(
               text: 'Sign Up',
               onTap: () => signUpUser(context),
@@ -88,17 +90,17 @@ class SignupPage extends StatelessWidget {
                   'Already a member?',
                   style: TextStyle(color: Colors.grey[200]),
                 ),
-                SizedBox(width: 4),
+                const SizedBox(width: 4),
                 GestureDetector(
                   onTap: () {
                     // Navigate to the signup page when "Register now" is clicked
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginPage()
+                      MaterialPageRoute(builder: (context) => const LoginPage()
                       ),
                     );
                   },
-                  child: Text(
+                  child: const Text(
                     'Login now',
                     style: TextStyle(
                       color: Colors.blue,

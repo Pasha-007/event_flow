@@ -1,4 +1,3 @@
-import 'package:event_flow/pages/home_page.dart';
 import 'package:event_flow/pages/signup_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +5,7 @@ import '../components/my_button.dart';
 import '../components/my_textfield.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -118,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                   'Not a member?',
                   style: TextStyle(color: Colors.grey[200]),
                 ),
-                SizedBox(width: 4),
+                const SizedBox(width: 4),
                 GestureDetector(
                   onTap: () {
                     // Navigate to the signup page when "Register now" is clicked
@@ -128,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     );
                   },
-                  child: Text(
+                  child: const Text(
                     'Register now',
                     style: TextStyle(
                       color: Colors.blue,
