@@ -1,4 +1,5 @@
 import 'package:event_flow/pages/home_page.dart';
+import 'package:event_flow/pages/signup_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../components/my_button.dart';
@@ -106,6 +107,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 20.0),
             MyButton(
+              text: 'Sign In',
               onTap: () => signUserIn(context),
             ),
             const SizedBox(height: 20,),
@@ -116,15 +118,27 @@ class _LoginPageState extends State<LoginPage> {
                   'Not a member?',
                   style: TextStyle(color: Colors.grey[200]),
                 ),
-                const SizedBox(width: 4),
-                const Text(
-                  'Register now',
-                  style: TextStyle(
-                    color: Colors.blue, fontWeight: FontWeight.bold,
+                SizedBox(width: 4),
+                GestureDetector(
+                  onTap: () {
+                    // Navigate to the signup page when "Register now" is clicked
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SignupPage()
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'Register now',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
             ),
+
 
           ],
         ),
