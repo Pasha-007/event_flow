@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import 'event.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,8 +14,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final user = FirebaseAuth.instance.currentUser!;
-
   DateTime today = DateTime.now();
+  DateTime? _SelectedDay;
+
+  Map<DateTime,  List<Event>> events = {};
   void _onDaySelected (DateTime day, DateTime focusedDay ){
     setState(() {
       today = day;
@@ -58,7 +62,6 @@ class _HomePageState extends State<HomePage> {
                 firstDay: DateTime.utc(2010, 10, 16),
                 lastDay: DateTime.utc(2030, 3, 14),
                 onDaySelected: _onDaySelected,
-
             ),
           )
         ],
