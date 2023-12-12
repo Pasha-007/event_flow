@@ -1,12 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import 'add_event.dart';
 import 'event.dart';
 
-
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -15,25 +16,55 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final user = FirebaseAuth.instance.currentUser!;
   DateTime today = DateTime.now();
-  DateTime? _SelectedDay;
+  DateTime? _selectedDay;
 
-  Map<DateTime,  List<Event>> events = {};
-  void _onDaySelected (DateTime day, DateTime focusedDay ){
+  Map<DateTime, List<Event>> events = {};
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch events from Firestore when the widget is initialized
+    fetchEventsFromFirestore();
+  }
+
+  void _onDaySelected(DateTime day, DateTime focusedDay) {
     setState(() {
       today = day;
     });
   }
 
-  void signUserOut(){
+  void signUserOut() {
     FirebaseAuth.instance.signOut();
+  }
+
+  Future<void> fetchEventsFromFirestore() async {
+    try {
+      // Retrieve events from Firestore
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+      await FirebaseFirestore.instance.collection('events').get();
+
+      // Update the events map based on the retrieved data
+      events = {};
+      querySnapshot.docs.forEach((doc) {
+        Event event = Event.fromJson(doc.data());
+        DateTime date = event.date;
+        events.update(date, (existingEvents) => [...existingEvents, event],
+            ifAbsent: () => [event]);
+      });
+
+      // Force a rebuild to reflect the updated events on the calendar
+      setState(() {});
+    } catch (e) {
+      print('Error fetching events: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffCCC),
+      backgroundColor: const Color(0x000ffccc),
       appBar: AppBar(
-        title: Text('Home'),
+        title: const Text('Home'),
         actions: [
           IconButton(
             onPressed: signUserOut,
@@ -44,26 +75,53 @@ class _HomePageState extends State<HomePage> {
       body: Content(),
     );
   }
-  Widget Content(){
+
+  Widget Content() {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Column(
         children: [
-          // Text('123'),
-          // SizedBox(height: 20),
           Container(
             child: TableCalendar(
-                locale: "en_US",
-                rowHeight: 43,
-                headerStyle: HeaderStyle(formatButtonVisible: false, titleCentered: true),
-                availableGestures: AvailableGestures.all,
-                selectedDayPredicate: (day) => isSameDay(day, today),
-                focusedDay: today,
-                firstDay: DateTime.utc(2010, 10, 16),
-                lastDay: DateTime.utc(2030, 3, 14),
-                onDaySelected: _onDaySelected,
+              locale: "en_US",
+              rowHeight: 43,
+              headerStyle: const HeaderStyle(
+                formatButtonVisible: false,
+                titleCentered: true,
+              ),
+              availableGestures: AvailableGestures.all,
+              selectedDayPredicate: (day) => isSameDay(day, today),
+              focusedDay: today,
+              firstDay: DateTime.utc(2010, 10, 16),
+              lastDay: DateTime.utc(2030, 3, 14),
+              onDaySelected: _onDaySelected,
             ),
-          )
+          ),
+          SizedBox(height: 20),
+          FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddEvent()),
+              ).then((_) {
+                // Update events after returning from AddEvent page
+                fetchEventsFromFirestore();
+              });
+            },
+            child: Icon(Icons.add),
+          ),
+          SizedBox(height: 20),
+          Expanded(
+            child: ListView.builder(
+              itemCount: events[today]?.length ?? 0,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(events[today]![index].name),
+                  // Add any other fields you want to display
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
