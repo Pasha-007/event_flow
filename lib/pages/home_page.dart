@@ -45,12 +45,12 @@ class _HomePageState extends State<HomePage> {
 
       // Update the events map based on the retrieved data
       events = {};
-      querySnapshot.docs.forEach((doc) {
+      for (var doc in querySnapshot.docs) {
         Event event = Event.fromJson(doc.data());
         DateTime date = event.date;
         events.update(date, (existingEvents) => [...existingEvents, event],
             ifAbsent: () => [event]);
-      });
+      }
 
       // Force a rebuild to reflect the updated events on the calendar
       setState(() {});
@@ -97,20 +97,20 @@ class _HomePageState extends State<HomePage> {
               onDaySelected: _onDaySelected,
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           FloatingActionButton(
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => AddEvent()),
+                MaterialPageRoute(builder: (context) => const AddEvent()),
               ).then((_) {
                 // Update events after returning from AddEvent page
                 fetchEventsFromFirestore();
               });
             },
-            child: Icon(Icons.add),
+            child: const Icon(Icons.add),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Expanded(
             child: ListView.builder(
               itemCount: events[today]?.length ?? 0,

@@ -37,19 +37,19 @@ class _AddEventState extends State<AddEvent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Event'),
+        title: const Text('Add Event'),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: <Widget>[
           TextField(
             controller: _eventNameController,
-            decoration: InputDecoration(labelText: 'Event Name'),
+            decoration: const InputDecoration(labelText: 'Event Name'),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           ElevatedButton(
             onPressed: _saveEvent,
-            child: Text('Save Event'),
+            child: const Text('Save Event'),
           ),
         ],
       ),

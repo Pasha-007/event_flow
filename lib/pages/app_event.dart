@@ -39,14 +39,7 @@ class AppEvent{
 
   @override
   String toString() {
-    return 'AppEvent{' +
-        ' title: $title,' +
-        ' id: $id,' +
-        ' description: $description,' +
-        ' data: $data,' +
-        ' userId: $userId,' +
-        ' public: $public,' +
-        '}';
+    return 'AppEvent{ title: $title, id: $id, description: $description, data: $data, userId: $userId, public: $public,}';
   }
 
   AppEvent copyWith({
@@ -69,12 +62,12 @@ class AppEvent{
 
   Map<String, dynamic> toMap() {
     return {
-      'title': this.title,
-      'id': this.id,
-      'description': this.description,
-      'data': this.data,
-      'userId': this.userId,
-      'public': this.public,
+      'title': title,
+      'id': id,
+      'description': description,
+      'data': data,
+      'userId': userId,
+      'public': public,
     };
   }
 
